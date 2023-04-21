@@ -1,12 +1,8 @@
-package main
+package app
 
 import (
 	"log"
-	"net/http"
-	"os"
 
-	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/awslabs/aws-lambda-go-api-proxy/httpadapter"
 	telegram "gopkg.in/telegram-bot-api.v4"
 )
 
@@ -22,11 +18,12 @@ func handleCommand(bot *telegram.BotAPI, msg *telegram.Message) string {
 	}
 }
 
-func handleMessage(bot *telegram.BotAPI, msg *telegram.Message) {
-	log.Println("update", msg.From, msg.From.ID, msg.From.LastName)
+func HandleMessage(bot *telegram.BotAPI, msg *telegram.Message) {
 	if msg == nil { // ignore any non-Message Updates
 		return
 	}
+
+	log.Println("update", msg.From, msg.From.ID, msg.From.LastName)
 
 	if !msg.IsCommand() { // ignore any non-command Messages
 		return
@@ -36,23 +33,4 @@ func handleMessage(bot *telegram.BotAPI, msg *telegram.Message) {
 	if err != nil {
 		panic(err)
 	}
-}
-
-func main() {
-	botToken, found := os.LookupEnv("TELEGRAM_BOT_TOKEN")
-	if !found {
-		log.Fatalf("BOT_TOKEN not found")
-	}
-
-	bot, err := telegram.NewBotAPI(botToken)
-	if err != nil {
-		panic(err)
-	}
-
-	go lambda.Start(httpadapter.New(http.DefaultServeMux).ProxyWithContext)
-
-	for update := range bot.ListenForWebhook("/") {
-		go handleMessage(bot, update.Message)
-	}
-
 }
