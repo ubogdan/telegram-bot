@@ -9,7 +9,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/ubogdan/telegram-bot/app"
+	"github.com/ubogdan/telegram-bot/app/handlers"
 	"golang.org/x/crypto/acme/autocert"
 	telegram "gopkg.in/telegram-bot-api.v4"
 )
@@ -94,7 +94,7 @@ func main() {
 	}()
 
 	for update := range updates {
-		go app.HandleMessage(bot, update.Message)
+		go handlers.DefaultCommandHandler.HandleMessage(bot, update.Message)
 	}
 
 }

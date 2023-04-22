@@ -1,3 +1,6 @@
+//go:build lambda
+// +build lambda
+
 package main
 
 import (
@@ -6,8 +9,8 @@ import (
 	"os"
 
 	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/awslabs/aws-lambda-go-api-proxy/httpadapter"
-	"github.com/ubogdan/telegram-bot/app"
+	"github.com/ubogdan/telegram-bot/app/handlers"
+	"github.com/ubogdan/telegram-bot/app/httpadapter"
 	telegram "gopkg.in/telegram-bot-api.v4"
 )
 
@@ -39,9 +42,9 @@ func main() {
 	// Start listening for updates
 	go func() {
 		for update := range updates {
-			go app.HandleMessage(bot, update.Message)
+			go handlers.DefaultCommandHandler.HandleMessage(bot, update.Message)
 		}
 	}()
 
-	lambda.Start(httpadapter.New(http.DefaultServeMux).ProxyWithContext)
+	lambda.Start(httpadapter.New(http.DefaultServeMux))
 }
