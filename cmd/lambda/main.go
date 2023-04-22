@@ -17,17 +17,31 @@ func main() {
 		log.Fatalf("BOT_TOKEN not found")
 	}
 
+	botHookURL, found := os.LookupEnv("")
+	if !found {
+		log.Fatalf("TELEGRAM_BOT_WEBHOOK not found")
+	}
+
 	bot, err := telegram.NewBotAPI(botToken)
 	if err != nil {
 		log.Fatalf("newBot %s", err)
 	}
 
+	// Register http handler to http.DefaultServeMux
 	updates := bot.ListenForWebhook("/")
 
-	go lambda.Start(httpadapter.New(http.DefaultServeMux).ProxyWithContext)
-
-	for update := range updates {
-		go app.HandleMessage(bot, update.Message)
+	// Register hook with telegram
+	_, err = bot.SetWebhook(telegram.NewWebhook(botHookURL))
+	if err != nil {
+		panic(err)
 	}
 
+	// Start listening for updates
+	go func() {
+		for update := range updates {
+			go app.HandleMessage(bot, update.Message)
+		}
+	}()
+
+	lambda.Start(httpadapter.New(http.DefaultServeMux).ProxyWithContext)
 }
