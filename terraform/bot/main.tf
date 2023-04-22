@@ -42,7 +42,8 @@ resource "aws_lambda_function" "lambda_handler" {
 
   environment {
     variables = {
-      S3_BUCKET_REGION = "eu-central-1"
+      TELEGRAM_BOT_TOKEN = var.telegram_bot_token
+      TELEGRAM_BOT_WEBHOOK = var.telegram_bot_webhook
     }
   }
 

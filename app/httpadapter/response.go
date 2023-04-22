@@ -3,7 +3,6 @@ package httpadapter
 import (
 	"bytes"
 	"encoding/base64"
-	"errors"
 	"net/http"
 	"unicode/utf8"
 
@@ -88,7 +87,7 @@ func (r *URLResponseWriter) GetProxyResponse() (events.LambdaFunctionURLResponse
 	r.notifyClosed()
 
 	if r.status == defaultStatusCode {
-		return events.LambdaFunctionURLResponse{}, errors.New("Status code not set on response")
+		r.status = http.StatusOK
 	}
 
 	var output string

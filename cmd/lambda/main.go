@@ -1,6 +1,3 @@
-//go:build lambda
-// +build lambda
-
 package main
 
 import (
@@ -20,7 +17,7 @@ func main() {
 		log.Fatalf("BOT_TOKEN not found")
 	}
 
-	botHookURL, found := os.LookupEnv("")
+	botHookURL, found := os.LookupEnv("TELEGRAM_BOT_WEBHOOK")
 	if !found {
 		log.Fatalf("TELEGRAM_BOT_WEBHOOK not found")
 	}
@@ -31,7 +28,7 @@ func main() {
 	}
 
 	// Register http handler to http.DefaultServeMux
-	updates := bot.ListenForWebhook("/")
+	updates := bot.ListenForWebhook("/hooks/telegram")
 
 	// Register hook with telegram
 	_, err = bot.SetWebhook(telegram.NewWebhook(botHookURL))

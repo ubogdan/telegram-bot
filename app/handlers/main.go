@@ -38,6 +38,7 @@ func (ch *handler) HandleMessage(bot *telegram.BotAPI, msg *telegram.Message) {
 
 	if ch.commands == nil {
 		log.Printf("no handler registered")
+
 		return
 	}
 
@@ -47,7 +48,7 @@ func (ch *handler) HandleMessage(bot *telegram.BotAPI, msg *telegram.Message) {
 	if !found {
 		_, err := bot.Send(telegram.NewMessage(msg.Chat.ID, "I don't know that command"))
 		if err != nil {
-			log.Println(err)
+			log.Printf("bot.Send error %s", err)
 		}
 
 		return
@@ -55,6 +56,6 @@ func (ch *handler) HandleMessage(bot *telegram.BotAPI, msg *telegram.Message) {
 
 	err := command(bot, msg)
 	if err != nil {
-		log.Println("error handling command", commandName, ":", err)
+		log.Printf("error handling command %s: %s", commandName, err)
 	}
 }

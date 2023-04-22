@@ -12,7 +12,7 @@ variable "app_name" {
 
 variable "app_version" {
   type        = string
-  default     = "v0.0.1"
+  default     = "v0.0.5"
   description = "Container image version used to deploy the lambda function"
 }
 
@@ -38,4 +38,10 @@ variable "telegram_bot_token" {
   type        = string
   description = "Telegram bot token"
   default     = ""
+}
+
+variable "telegram_bot_webhook" {
+    type        = string
+    description = "Telegram bot webhook"
+    default     = ""
 }
