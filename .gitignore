@@ -17,6 +17,10 @@
 # IntelliJ IDEA
 .idea
 
+# Terraform
+.terraform
+terraform.tfvars
+
 # Dependency directories (remove the comment below to include it)
 # vendor/
 
