@@ -11,7 +11,7 @@ COPY . .
 
 ARG GOARCH=
 
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=${GOARCH} go build -v --ldflags '-s -w' -o ./build/service github.com/ubogdan/telegram-lambda/cmd/lambda
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=${GOARCH} go build -v --ldflags '-s -w' -o ./build/service github.com/ubogdan/telegram-bot/cmd/lambda
 
 ARG ARCH=
 
